@@ -1,0 +1,98 @@
+from enum import Enum
+
+class DynamicLayoutRules(Enum):
+    PAGE_WIDTH_RANGE = (600, 1400)
+    PAGE_HEIGHT_RANGE = (600, 1400)
+
+    MARGIN_X_RATIO = (0.01, 0.04)
+    MARGIN_Y_RATIO = (0.02, 0.05)
+    PADDING_X_RATIO = (0.01, 0.02)
+    PADDING_Y_RATIO = (0.01, 0.03)
+
+    TITLE_HEIGHT_RATIO = (0.15, 0.3)
+    TITLE_WIDTH_RATIO = (0.45, 1.0)
+
+    EXCERPT_HEIGHT_RATIO = (0.15, 0.3)
+    EXCERPT_WIDTH_RATIO = (0.45, 1.0)
+
+    IMAGE_HEIGHT_RATIO = (0.15, 0.5)
+    IMAGE_WIDTH_RATIO = (0.45, 1.0)
+
+    GRAPH_HEIGHT_RATIO = (0.25, 0.5)
+    GRAPH_WIDTH_RATIO = (0.6, 1.0)
+
+    RELATED_ARTICLES_HEIGHT_RATIO = (0.1, 0.25)
+    RELATED_ARTICLES_WIDTH_RATIO = (0.45, 1.0)
+
+    TITLE_FONT_RANGE = (20, 36)
+    EXCERPT_FONT_RANGE = (14, 20)
+    RELATED_ARTICLE_FONT_RANGE = (12, 18)
+
+
+class RuleBasedLayoutRules(Enum):
+    PAGE_WIDTH = 840
+    PAGE_HEIGHT = 1200
+    MARGIN_X = 15
+    MARGIN_Y = 20
+    PADDING = 10
+
+# Section 1: Title, Excerpt, Visuals (Optional)
+class S1LayoutRules(Enum):
+    WIDTH = 810
+    PAD_X = 10
+    PAD_Y = 10
+
+    TITLE_MIN_HEIGHT = 40
+    TITLE_MAX_HEIGHT = 120
+    TITLE_MIN_WIDTH = 300
+    TITLE_MAX_WIDTH = 790
+    TITLE_FONT_SIZE_MIN = 24
+    TITLE_FONT_SIZE_MAX = 48
+
+    EXCERPT_MIN_HEIGHT = 100
+    EXCERPT_MAX_HEIGHT = 250
+    EXCERPT_MIN_WIDTH = 300
+    EXCERPT_MAX_WIDTH = 790
+    EXCERPT_FONT_SIZE_MIN = 14
+    EXCERPT_FONT_SIZE_MAX = 22
+
+    IMAGE_MIN_HEIGHT = 150
+    IMAGE_MAX_HEIGHT = 380
+    IMAGE_MIN_WIDTH = 300
+    IMAGE_MAX_WIDTH = 790
+    # Threshold for deciding layout in section 1
+    IMAGE_RATIO_THRESHOLD = 1.1
+    # Minimum coverage of image in given space
+    IMAGE_COVERAGE_THRESHOLD = 0.75
+
+# Section 2: Graph
+class S2LayoutRules(Enum):
+    WIDTH = 810
+    PAD_Y = 10
+
+    GRAPH_MIN_HEIGHT = 500
+    GRAPH_MAX_HEIGHT = 600
+    GRAPH_MAX_WIDTH = 800
+    GRAPH_MARGIN = 0.1
+    GRAPH_FONT_TYPE = "Verdana"
+    GRAPH_FONT_COLOR = "#000000"
+
+    NODE_FONT_SIZE = 10
+    NODE_COLOR = "#42FF93"
+    
+    EDGE_FONT_SIZE = 8
+    EDGE_COLOR = "#D3D3D3"
+    EDGE_WIDTH = 2
+
+# Section 3: Additional/Relevant information
+class S3LayoutRules(Enum):
+    MAX_HEIGHT = 400
+    WIDTH = 810
+    PAD_X = 10
+    PAD_Y = 10
+
+    CONTENT_MIN_HEIGHT = 30
+    CONTENT_MAX_HEIGHT = 80
+    CONTENT_WIDTH = 790
+    CONTENT_FONT_SIZE = 12
+    CONTENT_PADDING = 8

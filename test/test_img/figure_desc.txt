@@ -1,0 +1,38 @@
+[
+    {
+        "description": "The figure is a horizontal bar chart with custom error bars comparing efficiency gains (in %) and cooling effect temperature reduction (in \u00b0C) for floating solar panels based on the provided data and color scheme.",
+        "size": [
+            783,
+            384
+        ],
+        "proportion": 2.0390625,
+        "path": "./test_img/figure_0.png"
+    },
+    {
+        "description": "No description provided",
+        "size": [
+            784,
+            484
+        ],
+        "proportion": 1.6198347107438016,
+        "path": "./test_img/figure_1.png"
+    },
+    {
+        "description": "A horizontal line plot illustrates the interpolated annual market values from 2022 to 2030 for the floating solar industry with a CAGR annotation in the accent color.",
+        "size": [
+            784,
+            484
+        ],
+        "proportion": 1.6198347107438016,
+        "path": "./test_img/figure_2.png"
+    },
+    {
+        "description": "A horizontal bar chart displaying augmented evaporation reduction percentages across interpolated stages with a polished, professional aesthetic.",
+        "size": [
+            784,
+            584
+        ],
+        "proportion": 1.3424657534246576,
+        "path": "./test_img/figure_3.png"
+    }
+]

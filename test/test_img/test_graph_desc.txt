@@ -1,0 +1,9 @@
+{
+    "description": "The figure is a relationship graph describing key entites",
+    "size": [
+        800,
+        600
+    ],
+    "proportion": 1.3333333333333333,
+    "path": "./test_img/test_graph.png"
+}

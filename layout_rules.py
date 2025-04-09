@@ -1,0 +1,35 @@
+from enum import Enum
+
+class InfographicLayoutRules(Enum):
+    PAGE_WIDTH_RANGE = (600, 1400)
+    PAGE_HEIGHT_RANGE = (600, 1400)
+
+    MARGIN_X_RATIO_RANGE = (0.01, 0.04)
+    MARGIN_Y_RATIO_RANGE = (0.02, 0.05)
+    PADDING_X_RATIO_RANGE = (0.01, 0.02)
+    PADDING_Y_RATIO_RANGE = (0.01, 0.03)
+
+    TITLE_FONT_RANGE = (16, 36)
+    TEXT_FONT_RANGE = (12, 22)
+
+class GraphLayoutRules(Enum):
+    WIDTH = 810
+    PAD_Y = 10
+
+    GRAPH_MIN_HEIGHT = 500
+    GRAPH_MAX_HEIGHT = 600
+    GRAPH_MAX_WIDTH = 800
+    GRAPH_MARGIN = 0.1
+    GRAPH_FONT_TYPE = "Verdana"
+    GRAPH_FONT_COLOR = "#000000"
+    GRAPH_BACKGROUND_COLOR = "FFFFFF"
+
+    WIDTH_SCALING_FACTOR = 1
+    HEIGHT_SCALING_FACTOR = 0.8
+
+    NODE_FONT_SIZE = 12
+    NODE_COLOR = "#42FF93"
+    
+    EDGE_FONT_SIZE = 10
+    EDGE_COLOR = "#D3D3D3"
+    EDGE_WIDTH = 2

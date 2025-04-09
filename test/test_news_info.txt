@@ -1,0 +1,29 @@
+{
+    "title": "Floating Solar Farms: A Key to Singapore\u2019s Renewable Energy Future",
+    "key_facts": {
+        "statistical": [
+            "Floating solar improves panel efficiency by about 10%."
+        ],
+        "non_statistical": [
+            "Solar energy is the most viable renewable option for Singapore due to lack of major rivers and low wind speed.",
+            "Falling prices of solar panels support solar energy as a viable option.",
+            "Terrestrial space constraints in Singapore make floating solar farms a potential future solution.",
+            "Floating solar installations reduce evaporation and conserve freshwater through shade-casting.",
+            "These systems can contribute to ecosystem management by reducing sunlight penetration, thus decreasing algae growth and improving water quality."
+        ]
+    },
+    "key_entities": [
+        "Singapore",
+        "Floating solar farms",
+        "Solar PV systems",
+        "Hydrogen",
+        "Ammonia",
+        "Natural gas"
+    ],
+    "additional_queries": [
+        "How does the efficiency of floating solar compare with traditional land-based solar farms?",
+        "What are the environmental impacts of large-scale floating solar farms on aquatic ecosystems?",
+        "How do other countries utilize floating solar technology, and what lessons can Singapore learn from them?",
+        "What role do government policies play in promoting or hindering the development of floating solar projects globally?"
+    ]
+}

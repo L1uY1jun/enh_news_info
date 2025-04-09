@@ -1,0 +1,334 @@
+{
+    "key_facts": {
+        "statistical": [
+            {
+                "group_title": "Efficiency Comparison of Floating vs Land-Based Solar",
+                "description": "Efficiency improvements of floating solar systems compared to land-based equivalents.",
+                "data_points": [
+                    {
+                        "X": "General Efficiency Improvement",
+                        "Y": "10",
+                        "unit": "%"
+                    },
+                    {
+                        "X": "Energy Yield Increase (General)",
+                        "Y": "5",
+                        "unit": "%"
+                    },
+                    {
+                        "X": "Energy Yield Increase (Rai et al.)",
+                        "Y": "18.25",
+                        "unit": "%"
+                    },
+                    {
+                        "X": "Efficiency Gain (Choi et al.)",
+                        "Y": "10",
+                        "unit": "%"
+                    },
+                    {
+                        "X": "Efficiency Gain at Peak Irradiance (Azmi et al.)",
+                        "Y": "14.6",
+                        "unit": "%"
+                    },
+                    {
+                        "X": "Energy Yield Increase with Cooling Effect (Murthy et al.)",
+                        "Y": "18",
+                        "unit": "%"
+                    },
+                    {
+                        "X": "Energy Yield Increase in Singapore (D\u00f6renk\u00e4mper et al.)",
+                        "Y": "6",
+                        "unit": "%"
+                    }
+                ]
+            },
+            {
+                "group_title": "Capacity of Major Floating Solar Farms",
+                "description": "Installed capacities of significant floating solar projects worldwide.",
+                "data_points": [
+                    {
+                        "X": "Dezhou Dingzhuang Farm",
+                        "Y": "320",
+                        "unit": "MW",
+                        "category": "China"
+                    },
+                    {
+                        "X": "Sembcorp Floating Solar Farm",
+                        "Y": "60",
+                        "unit": "MW",
+                        "category": "Singapore"
+                    },
+                    {
+                        "X": "Kagoshima Nanatsujima Plant",
+                        "Y": "70",
+                        "unit": "MW",
+                        "category": "Japan"
+                    },
+                    {
+                        "X": "Anhui Floating Solar Farm",
+                        "Y": "150",
+                        "unit": "MW",
+                        "category": "China"
+                    },
+                    {
+                        "X": "Cirata PV Plant Expansion Plan",
+                        "Y": "500",
+                        "unit": "MW",
+                        "category": "Indonesia"
+                    }
+                ]
+            },
+            {
+                "group_title": "Environmental Benefits from Floating Solar Farms",
+                "description": "Environmental impacts and carbon emission reductions achieved by floating solar installations.",
+                "data_points": [
+                    {
+                        "X": "Reduction in Water Evaporation",
+                        "Y": "70",
+                        "unit": "%"
+                    },
+                    {
+                        "X": "CO2 Reduction per MW Installed",
+                        "Y": "1000",
+                        "unit": "tons/year"
+                    },
+                    {
+                        "X": "Anhui Farm Annual CO2 Reduction",
+                        "Y": "150000",
+                        "unit": "tons/year"
+                    }
+                ]
+            },
+            {
+                "group_title": "Global Capacity and Potential of Floating Solar",
+                "description": "Existing installed capacities and potential future global capacity for floating solar photovoltaic systems.",
+                "data_points": [
+                    {
+                        "X": "Global Installed Capacity (2021)",
+                        "Y": "3",
+                        "unit": "GWp"
+                    },
+                    {
+                        "X": "China's Installed Capacity",
+                        "Y": "1.3",
+                        "unit": "GWp"
+                    },
+                    {
+                        "X": "'1% Reservoir Coverage' Global Potential Capacity",
+                        "Y": "404",
+                        "unit": "GWp"
+                    }
+                ]
+            },
+            {
+                "group_title": "Solar Panel Degradation Rates by Technology",
+                "description": "Annual efficiency degradation rates for different types of solar panels.",
+                "data_points": [
+                    {
+                        "X": "General High-quality Panels (Min)",
+                        "Y": "0.5",
+                        "unit": "% per year"
+                    },
+                    {
+                        "X": "General High-quality Panels (Max)",
+                        "Y": "0.8",
+                        "unit": "% per year"
+                    },
+                    {
+                        "X": "Monocrystalline Panels (Min)",
+                        "Y": "0.3",
+                        "unit": "% per year"
+                    },
+                    {
+                        "X": "Monocrystalline Panels (Max)",
+                        "Y": "0.5",
+                        "unit": "% per year"
+                    },
+                    {
+                        "X": "Polycrystalline Panels (Min)",
+                        "Y": "0.79",
+                        "unit": "% per year"
+                    },
+                    {
+                        "X": "Polycrystalline Panels (Max)",
+                        "Y": "1.67",
+                        "unit": "% per year"
+                    },
+                    {
+                        "X": "'Median Performance Drop' NREL Study USA Sites",
+                        "Y": "0.75",
+                        "unit": "'%' per year"
+                    }
+                ]
+            }
+        ],
+        "non_statistical": [
+            "Solar energy is the most viable renewable option for Singapore due to lack of major rivers, low wind speed, and terrestrial space constraints; thus floating solar farms offer a practical solution.",
+            "Floating photovoltaic systems are modular and scalable, adaptable to various water bodies such as ponds, reservoirs, and oceans.",
+            "Floating solar farms minimize land usage conflicts by utilizing water surfaces instead of valuable terrestrial land needed for other purposes.",
+            "The cooling effect from water beneath floating solar panels improves their efficiency compared to land-based installations.",
+            "Floating solar installations offer environmental advantages including reduced water evaporation rates and mitigation of algae growth through shading effects.",
+            "The shade cast by floating panels moderates water temperatures and reduces sunlight penetration into water bodies, helping control harmful algae blooms and improving overall aquatic ecosystem health.",
+            "Floating photovoltaics help countries reduce their carbon footprint significantly by generating clean energy with lower environmental impact compared to traditional energy generation methods.",
+            "Potential ecological challenges include disruption to aquatic ecosystems due to altered temperature profiles, reduced oxygen levels affecting fish populations, sediment disturbance from anchoring structures, and release of harmful compounds from certain plastics or coatings used over time."
+        ]
+    },
+    "title": "Floating Solar Farms: A Key to Singapore\u2019s Renewable Energy Future",
+    "graph": {
+        "nodes": [
+            [
+                "Floating Solar",
+                {
+                    "relevance": 10
+                }
+            ],
+            [
+                "Solar PV systems",
+                {
+                    "relevance": 9
+                }
+            ],
+            [
+                "Natural gas",
+                {
+                    "relevance": 5
+                }
+            ],
+            [
+                "Floating Solar Panels",
+                {
+                    "relevance": 9
+                }
+            ],
+            [
+                "Photovoltaic Panels",
+                {
+                    "relevance": 8
+                }
+            ],
+            [
+                "Aquatic Ecosystems",
+                {
+                    "relevance": 6
+                }
+            ],
+            [
+                "Renewable Energy",
+                {
+                    "relevance": 10
+                }
+            ],
+            [
+                "Scalability",
+                {
+                    "relevance": 8
+                }
+            ],
+            [
+                "Environmental Benefits",
+                {
+                    "relevance": 9
+                }
+            ]
+        ],
+        "edges": [
+            [
+                "Floating Solar",
+                "Solar PV systems",
+                {
+                    "relation": "compares to"
+                }
+            ],
+            [
+                "Floating Solar",
+                "Floating Solar Panels",
+                {
+                    "relation": "comprises"
+                }
+            ],
+            [
+                "Solar PV systems",
+                "Photovoltaic Panels",
+                {
+                    "relation": "includes"
+                }
+            ],
+            [
+                "Floating Solar",
+                "Aquatic Ecosystems",
+                {
+                    "relation": "impacts"
+                }
+            ],
+            [
+                "Floating Solar",
+                "Renewable Energy",
+                {
+                    "relation": "contributes to"
+                }
+            ],
+            [
+                "Renewable Energy",
+                "Scalability",
+                {
+                    "relation": "enhances"
+                }
+            ],
+            [
+                "Renewable Energy",
+                "Environmental Benefits",
+                {
+                    "relation": "provides"
+                }
+            ],
+            [
+                "Natural gas",
+                "Renewable Energy",
+                {
+                    "relation": "alternative to"
+                }
+            ],
+            [
+                "Floating Solar",
+                "Scalability",
+                {
+                    "relation": "offers"
+                }
+            ],
+            [
+                "Floating Solar",
+                "Environmental Benefits",
+                {
+                    "relation": "offers"
+                }
+            ]
+        ]
+    },
+    "colors": {
+        "primary": {
+            "background": "#f5f5f5",
+            "text": "#333333",
+            "accent": "#00796b"
+        },
+        "data_viz": {
+            "sequential_palette": [
+                "#e0f2f1",
+                "#b2dfdb",
+                "#80cbc4",
+                "#4db6ac",
+                "#26a69a",
+                "#009688",
+                "#00796b"
+            ],
+            "categorical_palette": [
+                "#1b9e77",
+                "#d95f02",
+                "#7570b3",
+                "#e7298a",
+                "#66a61e",
+                "#e6ab02",
+                "#a6761d"
+            ]
+        }
+    }
+}

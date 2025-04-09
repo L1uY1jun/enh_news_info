@@ -1,0 +1,6 @@
+__pycache__
+.env
+.env.docker
+
+sample_images
+sample_html
