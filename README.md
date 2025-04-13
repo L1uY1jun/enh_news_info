@@ -45,7 +45,7 @@ Then fill in your API keys and paths inside `.env`.
 python main.py
 ```
 
-2. Interact with the bot via Telegram at: t.me/eCaptionBot
+2. Interact with the bot via Telegram at: [t.me/eCaptionBot](t.me/eCaptionBot)
 
 ---
 
