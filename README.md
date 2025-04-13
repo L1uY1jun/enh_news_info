@@ -27,7 +27,7 @@ Download and install [Chromedriver](https://developer.chrome.com/docs/chromedriv
 
 4. Set Up Environment Variables
 
-Copy the example file and configure your secrets:
+Copy the example file and configure the tokens as per the example:
 
 ```bash
 cp .env.example .env
