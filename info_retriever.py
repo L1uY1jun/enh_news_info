@@ -1,3 +1,4 @@
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from dotenv import load_dotenv
 from info_extractor import extract_info
 from openai import OpenAI
@@ -10,7 +11,8 @@ load_dotenv()
 client = OpenAI(api_key=os.getenv("PERPLEXITY_API_KEY"), base_url=os.getenv("PERPLEXITY_URL"))
 
 MIN_NUM_FACTS = 30
-MIN_CITATIONS = 4
+MIN_CITATIONS = 5
+MAX_THREADS = min(5, os.cpu_count())
 
 def retrieve_info(news_info, processed_urls, user_goal, threshold=MIN_NUM_FACTS):
     retrieved_info = copy.deepcopy(news_info)
@@ -25,11 +27,19 @@ def retrieve_info(news_info, processed_urls, user_goal, threshold=MIN_NUM_FACTS)
 
         query = additional_queries.pop(0)
         response = query_relevant_articles(query)
+        new_urls = [url for url in response if url not in processed_urls]
 
-        for news_url in response:
-            if news_url not in processed_urls:
+        with ThreadPoolExecutor(max_workers=MAX_THREADS) as executor:
+            futures = {
+                executor.submit(extract_info, url, user_goal, topic): url
+                for url in new_urls
+            }
+
+            for future in as_completed(futures):
+                news_url = futures[future]
+                extracted_info = future.result()
+
                 processed_urls.add(news_url)
-                extracted_info = extract_info(news_url, user_goal, topic)
 
                 key_facts["statistical"].extend(extracted_info["key_facts"]["statistical"])
                 key_facts["non_statistical"].extend(extracted_info["key_facts"]["non_statistical"])
@@ -58,6 +68,7 @@ if __name__ == "__main__":
     goal = "Highlight energy generation efficiency between floating solar and other forms of renewable energy used in Singapore, showing their environmental benefits and scalability."
 
     retrieved_info = retrieve_info(test_news_info, processed_urls, goal)
+    print(retrieved_info)
     
     with open("./Agent-Model-Infographic-Generator/test/test_retrieved_info.txt", "w") as f:
         json.dump(retrieved_info, f, indent=4)

@@ -7,6 +7,8 @@ from PIL import Image
 import ast
 import io
 import json
+import matplotlib
+matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import networkx as nx
 import openai
@@ -28,7 +30,7 @@ DEFAULT_LAYOUT_PARAMS = {
 FIG_MIN_WIDTH = 8
 FIG_MIN_HEIGHT = 6
 
-def generate_graph(graph_data, color_scheme, has_edge_relation):
+def generate_graph(graph_data, color_scheme, has_edge_relation=True):
     layout = generate_graph_layout(graph_data, color_scheme)
     return draw_graph(graph_data, layout, has_edge_relation)
 
@@ -163,13 +165,13 @@ if __name__ == "__main__":
     graph_layout = generate_graph_layout(graph_data, color_scheme)
     graph_img, specs = draw_graph(graph_data, graph_layout)
 
-    # graph_img.show()
+    graph_img.show()
     
-    save_path = "./Agent-Model-Infographic-Generator/test/test_img/"
-    img_file_name = "test_graph.png"
-    graph_img.save(save_path + img_file_name)
+    # save_path = "./Agent-Model-Infographic-Generator/test/test_img/"
+    # img_file_name = "test_graph.png"
+    # graph_img.save(save_path + img_file_name)
 
-    specs["path"] = f"./test_img/{img_file_name}"
-    specs_file_name = "test_graph_desc.txt"
-    with open(save_path + specs_file_name, "w") as f:
-        json.dump(specs, f, indent=4)
+    # specs["path"] = f"./test_img/{img_file_name}"
+    # specs_file_name = "test_graph_desc.txt"
+    # with open(save_path + specs_file_name, "w") as f:
+    #     json.dump(specs, f, indent=4)

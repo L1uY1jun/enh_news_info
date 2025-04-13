@@ -147,7 +147,6 @@ Instructions:
     - Assign a relevance score between 1 and 10 based on how well the entity contributes to understanding the broader topic (i.e., systems, technologies, methodologies, key concepts).
     - Limit entity names to 20 characters or fewer, using abbreviations where necessary.
 2. Create relation edges between related entities, specifying the relationship between them.
-    - Ensure that every entity is connected, meaning there is a path between every pair of entities in the graph.
     - Keep relationship descriptions brief, with a maximum of 4 words.
 
 Here is the given Information:
@@ -175,6 +174,8 @@ Output only the following in valid python dictionary format:
 GRAPH_SYSTEM_PROMPT = """You are an expert at information analysis and relationship graph design. Your task is to analyze and process key entities as per the given instructions.
 
 The output must be a Python dictionary, delimited with triple backticks, and should not include any additional text, Markdown formatting, or escape characters.
+
+Every entity must be connected, meaning there is a path between every pair of entities in the graph.
 """
 
 def generate_graph_data(title, key_entities, user_goal):

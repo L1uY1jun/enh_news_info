@@ -1,9 +1,12 @@
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime
 from dotenv import load_dotenv
 from openai import OpenAI
 from PIL import Image
 import io
 import json
+import matplotlib
+matplotlib.use("Agg") 
 import matplotlib.pyplot as plt
 import openai
 import os
@@ -15,22 +18,30 @@ load_dotenv()
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 EMPTY_IMAGE = Image.new("RGB", (1, 1), (0, 0, 0))
+MAX_THREADS = min(5, os.cpu_count())
 
 def generate_figures(stats_data, color_scheme):
     figures = []
-    for stats in stats_data:
-        img, desc = generate_figure(stats, color_scheme)
-        if img == EMPTY_IMAGE:
-            continue
 
-        width, height = img.size
-        img_specifications = {
-            "description": desc,
-            "size": [width, height],
-            "proportion": width / height
+    with ThreadPoolExecutor(max_workers=MAX_THREADS) as executor:
+        futures = {
+            executor.submit(generate_figure, stats, color_scheme): stats
+            for stats in stats_data
         }
-        figures.append({"figure": img, "specifications": img_specifications})
-    
+
+        for future in as_completed(futures):
+            stats = futures[future]
+            img, desc = future.result()
+            if img == EMPTY_IMAGE:
+                continue
+
+            width, height = img.size
+            img_specifications = {
+                "description": desc,
+                "size": [width, height],
+                "proportion": width / height
+            }
+            figures.append({"figure": img, "specifications": img_specifications})
     return figures
 
 FIGURE_PROMPT = """

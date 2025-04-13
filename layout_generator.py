@@ -112,6 +112,7 @@ def polish_layout(title, key_facts, figure_specs, graph_spec, html_code, user_re
     user_prompt = POLISH_HTML_PROMPT.format(
         html=html_code,
         req=user_request,
+        title=title,
         facts=key_facts,
         f_spec=figure_specs,
         g_spec=graph_spec,

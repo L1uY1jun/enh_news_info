@@ -10,16 +10,13 @@ from renderer import render
 from evaluator import evaluate
 from util import *
 import copy
+import json
 
-OUTPUT_PATH = Path("./Agent-Model-Infographic-Generator/out")
 TARGET_SCORE = 21
 
-DEFAULT_GOAL = "To extract key data and insights from the news article for creating a clear, engaging infographic with context to help viewers easily understand the broader topic."
-
-user_feedback = {
-    "end_session": False,
-    "modify_html": False,
-    "regen_info": False,
+DEFAULT_FEEDBACK = {
+    "regen_layout": True,
+    "modify_layout": False,
     "regen_content": True,
     "regen_figures": True,
     "regen_graph": True,
@@ -27,84 +24,174 @@ user_feedback = {
     "inputs": {}
 }
 
-def generate_infographic(article_url, user_request=None, user_feedback=user_feedback):
-    out_dst = datetime.today().strftime('%Y_%m_%d_%H_%M')
-    out_dir = OUTPUT_PATH / out_dst
-    out_dir.mkdir(parents=True, exist_ok=True)
+def generate_infographic(article_url, user_request, out_dir):
+    print("Extracting and analyzing news content...")
+    news_info = extract_info(article_url, user_request)
+    processed_urls = set([article_url])
 
-    user_request = user_request or DEFAULT_GOAL
+    print("Searching for additional information...")
+    retrieved_data = retrieve_info(news_info, processed_urls, user_request)
 
-    while not user_feedback["end_session"]:
-        if user_feedback["regen_content"]:
-            print("Extracting and analyzing news content...")
-            news_info = extract_info(article_url, user_request)
-            processed_urls = set([article_url])
+    print("Processing retrieved data...")
+    refined_data = manage_info(retrieved_data, user_request)
 
-            print("Searching for additional information...")
-            retrieved_data = retrieve_info(news_info, processed_urls, user_request)
+    title = refined_data["title"]
+    key_facts = refined_data["key_facts"]["non_statistical"]
+    stats_data = refined_data["key_facts"]["statistical"]
+    graph_data = refined_data["graph"]
+    color_scheme = refined_data["colors"]
+    
+    print("Visualizing statistical data...")
+    figure_data = generate_figures(stats_data, color_scheme)
+    figure_specs = save_figures(figure_data, out_dir)
 
-            print("Processing retrieved data...")
-            refined_data = manage_info(retrieved_data, user_request)
-        elif user_feedback["lack_content"]:
-            temp = {
-                "title": news_info["title"],
-                "key_facts": {"statistical": [], "non_statistical": []},
-                "key_entities": [],
-                "additional_queries": user_feedback["inputs"]["additional_queries"]
-            }
+    print("Generating graph...")
+    graph, graph_spec = generate_graph(
+        graph_data, color_scheme
+    )
+    save_graph(graph, graph_spec, out_dir)
 
-            print("Searching for additional information...")
-            extra_data = retrieve_info(temp, user_request, 15)
-            retrieved_data["key_facts"]["statistical"].extend(extra_data["key_facts"]["statistical"])
-            retrieved_data["key_facts"]["non_statistical"].extend(extra_data["key_facts"]["non_statistical"])
-            retrieved_data["key_entities"].extend(extra_data["key_entities"])
+    info_img, html_code, evaluation = process_infographic(
+        title=title, 
+        key_facts=key_facts, 
+        figure_specs=figure_specs, 
+        graph_spec=graph_spec, 
+        color_scheme=color_scheme, 
+        suggestions=user_request,
+        out_dir=out_dir
+    )
 
-            print("Processing additional retrieved data...")
-            refined_data = manage_info(retrieved_data, user_request)
+    info_metadata = {
+        "url": article_url,
+        "title": title,
+        "facts": key_facts,
+        "stats": stats_data,
+        "graph": graph_data,
+        "color_scheme": color_scheme,
+        "f_specs": figure_specs,
+        "g_specs": graph_spec,
+        "html": html_code
+    }
+    
+    save_infographic(info_img, info_metadata, out_dir)
 
-        title = refined_data["title"]
-        key_facts = refined_data["key_facts"]["non_statistical"]
-        stats_data = refined_data["key_facts"]["statistical"]
-        graph_data = refined_data["graph"]
-        color_scheme = refined_data["colors"]
-        
-        if user_feedback["regen_figures"]:
-            print("Visualizing statistical data...")
-            figure_data = generate_figures(stats_data, color_scheme)
-            figure_specs = save_figures(figure_data, out_dir)
-        if user_feedback["regen_graph"]:
-            print("Generating graph...")
-            graph, graph_spec = generate_graph(
-                graph_data, color_scheme, user_feedback["inputs"].get("has_edge_relation", True)
-            )
-            save_graph(graph, graph_spec, out_dir)
+    forward_metadata = {
+        "article_url": article_url,
+        "user_request": user_request,
+        "processed_urls": processed_urls,
+        "retrieved_data": retrieved_data,
+        "refined_data": refined_data,
+        "figure_data": figure_data,
+        "graph": graph,
+        "graph_spec": graph_spec,
+        "html_code": html_code
+    }
 
-        info_img, html_code = process_infographic(
-            out_dir, key_facts, figure_specs, graph_spec, 
-            title, color_scheme, user_request, user_feedback
-        )
+    return info_img, forward_metadata, evaluation
 
-        info_metadata = {
-            "url": article_url,
-            "title": title,
-            "facts": key_facts,
-            "stats": stats_data,
-            "graph": graph_data,
-            "color_scheme": color_scheme,
-            "f_specs": figure_specs,
-            "g_specs": graph_spec,
-            "html": html_code
+def modify_infographic(forward_metadata, user_feedback, out_dir):
+    article_url = forward_metadata["article_url"]
+    user_request = forward_metadata["user_request"]
+    processed_urls = forward_metadata["processed_urls"]
+    retrieved_data = forward_metadata["retrieved_data"]
+    refined_data = forward_metadata["refined_data"]
+    figure_data = forward_metadata["figure_data"]
+    graph = forward_metadata["graph"]
+    graph_spec = forward_metadata["graph_spec"]
+    html_code = forward_metadata["html_code"]
+
+    if user_feedback["regen_content"]:
+        print("Extracting and analyzing news content...")
+        news_info = extract_info(article_url, user_request)
+        processed_urls = set([article_url])
+
+        print("Searching for additional information...")
+        retrieved_data = retrieve_info(news_info, processed_urls, user_request)
+
+        print("Processing retrieved data...")
+        refined_data = manage_info(retrieved_data, user_request)
+    elif user_feedback["lack_content"]:
+        temp = {
+            "title": retrieved_data["title"],
+            "key_facts": {"statistical": [], "non_statistical": []},
+            "key_entities": [],
+            "additional_queries": user_feedback["inputs"]["additional_queries"]
         }
-        out_file = out_dir / 'metadata.txt'
-        with out_file.open('w') as f:
-            json.dump(info_metadata, f, indent=2)
-        
-        save_infographic(info_img, out_dir)
 
-def process_infographic(out_dir, title, key_facts, figure_specs, graph_spec, color_scheme, suggestions, user_feedback):
-    suggestions = suggestions or "No suggestions yet"
+        print("Searching for additional information...")
+        extra_data = retrieve_info(temp, processed_urls, user_request, 15)
+        retrieved_data["key_facts"]["statistical"].extend(extra_data["key_facts"]["statistical"])
+        retrieved_data["key_facts"]["non_statistical"].extend(extra_data["key_facts"]["non_statistical"])
+        retrieved_data["key_entities"].extend(extra_data["key_entities"])
+
+        print("Processing additional retrieved data...")
+        refined_data = manage_info(retrieved_data, user_request)
+
+    title = refined_data["title"]
+    key_facts = refined_data["key_facts"]["non_statistical"]
+    stats_data = refined_data["key_facts"]["statistical"]
+    graph_data = refined_data["graph"]
+    color_scheme = refined_data["colors"]
+    
+    if user_feedback["regen_figures"]:
+        print("Visualizing statistical data...")
+        figure_data = generate_figures(stats_data, color_scheme)
+
+    figure_specs = save_figures(figure_data, out_dir)
+
+    if user_feedback["regen_graph"]:
+        print("Generating graph...")
+        graph, graph_spec = generate_graph(
+            graph_data, color_scheme
+        )
+    
+    save_graph(graph, graph_spec, out_dir)
+
+    info_img, html_code, evaluation = process_infographic(
+        title=title, 
+        key_facts=key_facts, 
+        figure_specs=figure_specs, 
+        graph_spec=graph_spec, 
+        color_scheme=color_scheme, 
+        suggestions=user_request,
+        out_dir=out_dir,
+        user_feedback=user_feedback, 
+        html_code=html_code
+    )
+
+    info_metadata = {
+        "url": article_url,
+        "title": title,
+        "facts": key_facts,
+        "stats": stats_data,
+        "graph": graph_data,
+        "color_scheme": color_scheme,
+        "f_specs": figure_specs,
+        "g_specs": graph_spec,
+        "html": html_code
+    }
+    
+    save_infographic(info_img, info_metadata, out_dir)
+
+    forward_metadata = {
+        "article_url": article_url,
+        "user_request": user_request,
+        "processed_urls": processed_urls,
+        "retrieved_data": retrieved_data,
+        "refined_data": refined_data,
+        "figure_data": figure_data,
+        "graph": graph,
+        "graph_spec": graph_spec,
+        "html_code": html_code
+    }
+
+    return info_img, forward_metadata, evaluation
+
+def process_infographic(
+    title, key_facts, figure_specs, graph_spec, color_scheme, 
+    suggestions, out_dir, user_feedback=DEFAULT_FEEDBACK, html_code=None
+    ):
     info_color_scheme = color_scheme["primary"]
-    user_feedback["regen_info"] = True
     
     mod_tries = 3
     mod_hist = {
@@ -112,12 +199,12 @@ def process_infographic(out_dir, title, key_facts, figure_specs, graph_spec, col
         "eval_hist": []
     }
 
-    while user_feedback["regen_info"] or user_feedback["modify_html"]:
-        if user_feedback["modify_html"]:
+    while mod_tries > 0:
+        if user_feedback["modify_layout"]:
             print("Modifying current infographic...")
             suggestions = user_feedback["inputs"]["suggestions"]
             html_code = polish_layout(title, key_facts, figure_specs, graph_spec, html_code, suggestions)
-        else:
+        elif user_feedback["regen_layout"]:
             print("Processing infographic...")
             html_code = generate_layout(title, key_facts, figure_specs, graph_spec, info_color_scheme, suggestions)
         
@@ -130,7 +217,7 @@ def process_infographic(out_dir, title, key_facts, figure_specs, graph_spec, col
             if eval_score < TARGET_SCORE:
                 if mod_tries > 0:
                     reset_feedback(user_feedback)
-                    user_feedback["modify_html"] = True
+                    user_feedback["modify_layout"] = True
                     user_feedback["inputs"]["suggestions"] = evaluation["suggestions"]
 
                     mod_hist["infographic_hist"].append(info_img)
@@ -147,20 +234,8 @@ def process_infographic(out_dir, title, key_facts, figure_specs, graph_spec, col
                     info_img = mod_hist["infographic_hist"][max_score_index]
                     evaluation = mod_hist["eval_hist"][max_score_index]
 
-            get_user_feedback(info_img, evaluation, user_feedback, TARGET_SCORE)
-
-            mod_tries = 3
-            mod_hist = {
-                "infographic_hist": [],
-                "eval_hist": []
-            }
+            break
         else:
             print("HTML verification failed. Retrying...")
 
-    return info_img, html_code
-
-if __name__ == "__main__":
-    article_url = "https://www.channelnewsasia.com/commentary/singapore-indonesia-floating-solar-farm-batam-clean-energy-electricity-4737861"
-
-    info_img = generate_infographic(article_url)
-    info_img.show()
+    return info_img, html_code, evaluation
