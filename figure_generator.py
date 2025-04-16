@@ -5,6 +5,7 @@ from openai import OpenAI
 from PIL import Image
 import io
 import json
+import logging
 import matplotlib
 matplotlib.use("Agg") 
 import matplotlib.pyplot as plt
@@ -16,6 +17,7 @@ import warnings
 
 load_dotenv()
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+logger = logging.getLogger(__name__)
 
 EMPTY_IMAGE = Image.new("RGB", (1, 1), (0, 0, 0))
 MAX_THREADS = min(5, os.cpu_count())
@@ -63,7 +65,8 @@ Instructions:
 6. Apply a professional, polished aesthetic.
 7. Do not include the description inside the plot.
 8. Reduce the length of the X label/category by summarizing, shortening, or abbreviating when application.
-    - Include a full name in the legend only if using an abbreviation (e.g., SD for Standard Deviation)
+    - Include a full name in the legend only if using an abbreviation (e.g., SD for Standard Deviation).
+    - Avoid having the legend take up excessive space by adjusting its position or size, ensuring it does not clutter the figure.
 9. Swap the X and Y axes when applicable to create a more informative or aesthetically pleasing plot.
 10. If the provided data is insufficient for a meaningful visualization, apply appropriate enhancement techniques such as interpolation, smoothing, or data augmentation to improve the plot's appearance.
 11. Provide a concise, one-sentence description of the expected figure, delimited with `|` at the end.
@@ -115,14 +118,14 @@ def generate_figure(stats, color_scheme):
                 plt.close(fig)
                 return img, desc
         except Exception as e:
-            print(f"[figure_generator] encountered execution error: {e}")
-            print("[figure_generator] retrying...")
+            logger.warning(f"Encountered execution error: {e}")
+            logger.info("Retrying...")
         finally:
             warnings.filterwarnings("default")
 
 # Testing-------------------------------------------------------
 if __name__ == "__main__":
-    with open("./Agent-Model-Infographic-Generator/test/test_refined_data.txt", "r") as f:
+    with open("./enh_news_info/test/test_refined_data.txt", "r") as f:
         test_refined_info = json.load(f)
 
     stats_data = test_refined_info["key_facts"]["statistical"]
@@ -130,7 +133,7 @@ if __name__ == "__main__":
     figure_data = generate_figures(stats_data, color_scheme)
 
     # specs = []
-    # save_path = "./Agent-Model-Infographic-Generator/test/test_img/"
+    # save_path = "./enh_news_info/test/test_img/"
     # for idx, figure in enumerate(figure_data):
     #     f_name = f"figure_{idx}.png"
     #     figure["figure"].save(save_path + f_name)

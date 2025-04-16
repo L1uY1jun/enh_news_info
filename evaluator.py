@@ -4,12 +4,14 @@ from openai import OpenAI
 from PIL import Image
 from util import encode_img, report_evaluation
 import ast
+import logging
 import openai
 import os
 import re
 
 load_dotenv()
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+logger = logging.getLogger(__name__)
 
 EVALUATION_USER_PROMPT = """
 Your task is to rigorously evaluate the provided infographic image using the quantitative metrics and scoring algorithms described below. Base your assessment on visual analysis principles and simulate relevant calculations to justify your scoring.
@@ -110,12 +112,12 @@ def evaluate(infographic_img):
             evaluation = ast.literal_eval(re.sub(r"^```(python|json)?|```$", "", response).strip())
             return evaluation
         except (SyntaxError, ValueError) as e:
-            print(f"[evaluator] error parsing response: {e}")
-            print("[evaluator] retrying...")
+            logger.warning(f"Error parsing response: {e}")
+            logger.info("Retrying...")
 
 # Testing-------------------------------------------------------
 if __name__ == "__main__":
-    info_path = "./Agent-Model-Infographic-Generator/test/test_infographic.png"
+    info_path = "./enh_news_info/test/test_infographic.png"
     info_img = Image.open(info_path)
 
     evaluation = evaluate(info_img)

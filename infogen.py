@@ -11,6 +11,7 @@ from evaluator import evaluate
 from util import *
 import copy
 import json
+import logging
 
 TARGET_SCORE = 21
 
@@ -24,15 +25,17 @@ DEFAULT_FEEDBACK = {
     "inputs": {}
 }
 
+logger = logging.getLogger(__name__)
+
 def generate_infographic(article_url, user_request, out_dir):
-    print("Extracting and analyzing news content...")
+    logger.info("Extracting and analyzing news content...")
     news_info = extract_info(article_url, user_request)
     processed_urls = set([article_url])
 
-    print("Searching for additional information...")
+    logger.info("Searching for additional information...")
     retrieved_data = retrieve_info(news_info, processed_urls, user_request)
 
-    print("Processing retrieved data...")
+    logger.info("Processing retrieved data...")
     refined_data = manage_info(retrieved_data, user_request)
 
     title = refined_data["title"]
@@ -41,11 +44,11 @@ def generate_infographic(article_url, user_request, out_dir):
     graph_data = refined_data["graph"]
     color_scheme = refined_data["colors"]
     
-    print("Visualizing statistical data...")
+    logger.info("Visualizing statistical data...")
     figure_data = generate_figures(stats_data, color_scheme)
     figure_specs = save_figures(figure_data, out_dir)
 
-    print("Generating graph...")
+    logger.info("Generating graph...")
     graph, graph_spec = generate_graph(
         graph_data, color_scheme
     )
@@ -101,14 +104,14 @@ def modify_infographic(forward_metadata, user_feedback, out_dir):
     html_code = forward_metadata["html_code"]
 
     if user_feedback["regen_content"]:
-        print("Extracting and analyzing news content...")
+        logger.info("Extracting and analyzing news content...")
         news_info = extract_info(article_url, user_request)
         processed_urls = set([article_url])
 
-        print("Searching for additional information...")
+        logger.info("Searching for additional information...")
         retrieved_data = retrieve_info(news_info, processed_urls, user_request)
 
-        print("Processing retrieved data...")
+        logger.info("Processing retrieved data...")
         refined_data = manage_info(retrieved_data, user_request)
     elif user_feedback["lack_content"]:
         temp = {
@@ -118,13 +121,13 @@ def modify_infographic(forward_metadata, user_feedback, out_dir):
             "additional_queries": user_feedback["inputs"]["additional_queries"]
         }
 
-        print("Searching for additional information...")
+        logger.info("Searching for additional information...")
         extra_data = retrieve_info(temp, processed_urls, user_request, 15)
         retrieved_data["key_facts"]["statistical"].extend(extra_data["key_facts"]["statistical"])
         retrieved_data["key_facts"]["non_statistical"].extend(extra_data["key_facts"]["non_statistical"])
         retrieved_data["key_entities"].extend(extra_data["key_entities"])
 
-        print("Processing additional retrieved data...")
+        logger.info("Processing additional retrieved data...")
         refined_data = manage_info(retrieved_data, user_request)
 
     title = refined_data["title"]
@@ -134,13 +137,13 @@ def modify_infographic(forward_metadata, user_feedback, out_dir):
     color_scheme = refined_data["colors"]
     
     if user_feedback["regen_figures"]:
-        print("Visualizing statistical data...")
+        logger.info("Visualizing statistical data...")
         figure_data = generate_figures(stats_data, color_scheme)
 
     figure_specs = save_figures(figure_data, out_dir)
 
     if user_feedback["regen_graph"]:
-        print("Generating graph...")
+        logger.info("Generating graph...")
         graph, graph_spec = generate_graph(
             graph_data, color_scheme
         )
@@ -201,11 +204,11 @@ def process_infographic(
 
     while mod_tries > 0:
         if user_feedback["modify_layout"]:
-            print("Modifying current infographic...")
+            logger.info("Modifying current infographic...")
             suggestions = user_feedback["inputs"]["suggestions"]
             html_code = polish_layout(title, key_facts, figure_specs, graph_spec, html_code, suggestions)
         elif user_feedback["regen_layout"]:
-            print("Processing infographic...")
+            logger.info("Processing infographic...")
             html_code = generate_layout(title, key_facts, figure_specs, graph_spec, info_color_scheme, suggestions)
         
         if verify_html(html_code):
@@ -223,10 +226,10 @@ def process_infographic(
                     mod_hist["infographic_hist"].append(info_img)
                     mod_hist["eval_hist"].append(evaluation)
                     mod_tries -= 1
-                    print(f"Generated layout failed evaluation. Refining... (Attempts remaining: {mod_tries})")
+                    logger.info(f"Generated layout failed evaluation. Refining... (Attempts remaining: {mod_tries})")
                     continue
                 else:
-                    print("Generated layout failed evaluation. No refinement attempts remaining — returning best effort result.")
+                    logger.info("Generated layout failed evaluation. No refinement attempts remaining — returning best effort result.")
                     max_score_index = max(
                         range(len(mod_hist["eval_hist"])), 
                         key=lambda i: get_eval_score(mod_hist["eval_hist"][i])
@@ -236,6 +239,6 @@ def process_infographic(
 
             break
         else:
-            print("HTML verification failed. Retrying...")
+            logger.info("HTML verification failed. Retrying...")
 
     return info_img, html_code, evaluation

@@ -8,14 +8,17 @@ from newspaper import ArticleException
 from pathlib import Path
 from telebot.types import InlineKeyboardMarkup, InlineKeyboardButton, InputMediaPhoto
 from util import *
-import telebot
+import logging
 import os
 import sys
+import telebot
 import threading
 import time
 
 load_dotenv()
 BOT_TOKEN = os.getenv("BOT_TOKEN")
+
+logger = logging.getLogger(__name__)
 
 DEFAULT_GOAL = "To extract key data and insights from the news article for creating a clear, engaging infographic with context to help viewers easily understand the broader topic."
 
@@ -56,7 +59,7 @@ bot = telebot.TeleBot(BOT_TOKEN)
 user_data = {}
 chat_data = {}
 
-OUTPUT_PATH = Path("./Agent-Model-Infographic-Generator/out")
+OUTPUT_PATH = Path("./enh_news_info/out")
 
 def reset_user(chat_id):
     user_data.pop(chat_id, None)
@@ -423,7 +426,7 @@ def collect_custom_queries(message):
     bot.register_next_step_handler(msg, collect_custom_queries)
 
 def run_bot():
-    print("Bot is running...")
+    logger.info("Bot is running...")
     bot.infinity_polling()
 
 if __name__ == '__main__':

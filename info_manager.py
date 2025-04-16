@@ -2,12 +2,14 @@ from dotenv import load_dotenv
 from openai import OpenAI
 import ast
 import json
+import logging
 import openai
 import os
 import re
 
 load_dotenv()
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+logger = logging.getLogger(__name__)
 
 REFINEMENT_PROMPT = """
 Your task is to filter and refine the extracted information, ensuring its relevance to the given title and goal.
@@ -24,7 +26,7 @@ Instructions:
         - `"group_title"`: A short, descriptive name
         - `"description"`: What the group of data is about
         - `"data_points"`: A list of dictionaries where each has:
-            - `"X"`: A short label (e.g., year, category, method)
+            - `"X"`: A short label (e.g., year, category, method) that is consistent and comparable across the group. Use clear, well-defined ranges rather than vague or inconsistent categories.
             - `"Y"`: A single numeric value (no ranges)
             - `"unit"`: Unit of measurement (%, MW, $, etc.)
             - `"category"`: (Optional) Only include if the data is explicitly categorized (e.g., region, technology type).
@@ -124,8 +126,8 @@ def manage_info(retrieved_info, user_goal):
             refined_data = ast.literal_eval(re.sub(r"^```(python|json)?|```$", "", response).strip())
             break
         except (SyntaxError, ValueError) as e:
-            print(f"[info_manager] encountered error parsing response: {e}")
-            print("[info_manager] retrying...")
+            logger.warning(f"Encountered error parsing response: {e}")
+            logger.info("Retrying...")
     
     refined_data["title"] = retrieved_info["title"]
     
@@ -201,8 +203,8 @@ def generate_graph_data(title, key_entities, user_goal):
             response = completion.choices[0].message.content.strip()
             return ast.literal_eval(re.sub(r"^```(python|json)?|```$", "", response).strip())
         except (SyntaxError, ValueError) as e:
-            print(f"[info_manager] encountered rror parsing graph data: {e}")
-            print("[info_manager] retrying...")
+            logger.warning(f"Encountered error parsing graph data: {e}")
+            logger.info("Retrying...")
 
 COLOR_SCHEME_PROMPT = """
 Your task is to analyze the given infographic data and suggest an appropriate color scheme that enhances clarity and visual appeal while matching the theme and overall message.
@@ -253,17 +255,17 @@ def generate_color_scheme(refined_info):
             response = completion.choices[0].message.content.strip()
             return ast.literal_eval(re.sub(r"^```(python|json)?|```$", "", response).strip())
         except (SyntaxError, ValueError) as e:
-            print(f"[info_manager] encountered error parsing color scheme: {e}")
-            print("[info_manager] retrying...")
+            logger.warning(f"Encountered error parsing color scheme: {e}")
+            logger.info("Retrying...")
 
 # Testing-------------------------------------------------------
 if __name__ == "__main__":
-    with open("./Agent-Model-Infographic-Generator/test/test_retrieved_info.txt", "r") as f:
+    with open("./enh_news_info/test/test_retrieved_info.txt", "r") as f:
         test_retrieved_info = json.load(f)
 
     goal = "Highlight energy generation efficiency between floating solar and other forms of renewable energy used in Singapore, showing their environmental benefits and scalability."
 
     refined_data = manage_info(test_retrieved_info, goal)
 
-    with open("./Agent-Model-Infographic-Generator/test/test_refined_data.txt", "w") as f:
+    with open("./enh_news_info/test/test_refined_data.txt", "w") as f:
         json.dump(refined_data, f, indent=4)

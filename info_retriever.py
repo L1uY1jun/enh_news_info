@@ -61,14 +61,13 @@ def query_relevant_articles(query):
 
 # Testing-------------------------------------------------------
 if __name__ == "__main__":
-    with open("./Agent-Model-Infographic-Generator/test/test_news_info.txt", "r") as f:
+    with open("./enh_news_info/test/test_news_info.txt", "r") as f:
         test_news_info = json.load(f)
 
     processed_urls = set(["https://www.channelnewsasia.com/commentary/singapore-indonesia-floating-solar-farm-batam-clean-energy-electricity-4737861"])
     goal = "Highlight energy generation efficiency between floating solar and other forms of renewable energy used in Singapore, showing their environmental benefits and scalability."
 
     retrieved_info = retrieve_info(test_news_info, processed_urls, goal)
-    print(retrieved_info)
     
-    with open("./Agent-Model-Infographic-Generator/test/test_retrieved_info.txt", "w") as f:
+    with open("./enh_news_info/test/test_retrieved_info.txt", "w") as f:
         json.dump(retrieved_info, f, indent=4)

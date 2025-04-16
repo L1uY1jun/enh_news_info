@@ -39,8 +39,8 @@ def render(html_path):
 # Testing-------------------------------------------------------
 if __name__ == "__main__":
     html_url = "sample_html.html"
-    # html_path = "C:\\Users\\Liu Yijun\\Desktop\\Study\\FYP\\eCaption\\Agent-Model-Infographic-Generator\\test\\" + html_url
-    html_path = "C:/Users/Liu Yijun/Desktop/Study/FYP/eCaption/Agent-Model-Infographic-Generator/out/2025_04_08_21_03/layout.html"
+    # html_path = "C:\\Users\\Liu Yijun\\Desktop\\Study\\FYP\\eCaption\\enh_news_info\\test\\" + html_url
+    html_path = "C:/Users/Liu Yijun/Desktop/Study/FYP/eCaption/enh_news_info/out/2025_04_08_21_03/layout.html"
     
     infographic_img = render(html_path)
-    infographic_img.save("Agent-Model-Infographic-Generator/out/2025_04_08_21_03/init_infographic.png")
+    infographic_img.save("enh_news_info/out/2025_04_08_21_03/init_infographic.png")

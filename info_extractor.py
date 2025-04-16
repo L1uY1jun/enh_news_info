@@ -4,6 +4,7 @@ from newspaper.article import ArticleException
 from openai import OpenAI
 import ast
 import json
+import logging
 import os
 import openai
 import re
@@ -20,6 +21,8 @@ EMPTY_EXTRACTED_INFO = {
     "key_entities": [],
     "additional_queries": []
 }
+
+logger = logging.getLogger(__name__)
 
 EXTRACTION_PROMPT = """Your task is to refine the information extracted from a news article.
 
@@ -97,10 +100,10 @@ def extract_info(news_url, user_goal, topic=None):
         article.download()
         article.parse()
     except ArticleException as e:
-        print(f"ArticleException: Failed to process article at {news_url}")
+        logger.error(f"ArticleException: Failed to process article at {news_url}")
         return EMPTY_EXTRACTED_INFO
     except Exception as e:
-        print(f"Unexpected error processing article at {news_url}")
+        logger.error(f"Unexpected error processing article at {news_url}")
         return EMPTY_EXTRACTED_INFO
 
     if topic:
@@ -124,8 +127,8 @@ def extract_info(news_url, user_goal, topic=None):
             response = completion.choices[0].message.content.strip()
             return ast.literal_eval(re.sub(r"^```(python|json)?|```$", "", response).strip())
         except (SyntaxError, ValueError) as e:
-            print(f"[info_extractor] encountered error parsing response: {e}")
-            print("[info_extractor] retrying...")
+            logger.warning(f"Encountered error parsing response: {e}")
+            logger.info("Retrying...")
 
 # Testing-------------------------------------------------------
 if __name__ == "__main__":
@@ -133,7 +136,6 @@ if __name__ == "__main__":
     goal = "Compare energy generation efficiency of floating solar to other forms of renewable energy used in Singapore."
 
     info = extract_info(news_url, goal)
-    print(info)
     
-    # with open("./Agent-Model-Infographic-Generator/test/test_news_info.txt", "w") as f:
+    # with open("./enh_news_info/test/test_news_info.txt", "w") as f:
     #     json.dump(info, f, indent=4)

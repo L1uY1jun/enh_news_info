@@ -135,7 +135,7 @@ def verify_html(html_code):
 
 # Testing-------------------------------------------------------
 if __name__ == "__main__":
-    with open("./Agent-Model-Infographic-Generator/test/test_refined_data.txt", "r") as f:
+    with open("./enh_news_info/test/test_refined_data.txt", "r") as f:
         refined_data = json.load(f)
 
     title = refined_data["title"]
@@ -145,19 +145,19 @@ if __name__ == "__main__":
     desc_file_name ="figure_desc.txt"
     graph_desc_file_name = "test_graph_desc.txt"
 
-    in_path = "./Agent-Model-Infographic-Generator/test/test_img/"
+    in_path = "./enh_news_info/test/test_img/"
     with open(in_path + desc_file_name, "r") as f:
         figure_specs = json.load(f)
     with open(in_path + graph_desc_file_name, "r") as f:
         graph_spec = json.load(f)
     
     html_code = generate_layout(title, key_facts, figure_specs, graph_spec, color_scheme, "")
-    html_path = "./Agent-Model-Infographic-Generator/test/sample_html.html"
+    html_path = "./enh_news_info/test/sample_html.html"
 
-    if verify_html(html_code):
-        print("The HTML contains the 'infographic-container' class and is valid.")
-    else:
-        print("The HTML does not contain the 'infographic-container' class. Please check the structure.")
+    # if verify_html(html_code):
+    #     print("The HTML contains the 'infographic-container' class and is valid.")
+    # else:
+    #     print("The HTML does not contain the 'infographic-container' class. Please check the structure.")
 
     with open(html_path, "w") as f:
         f.write(html_code)

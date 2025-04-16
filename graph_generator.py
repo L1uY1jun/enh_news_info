@@ -7,6 +7,7 @@ from PIL import Image
 import ast
 import io
 import json
+import logging
 import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
@@ -18,6 +19,7 @@ import re
 
 load_dotenv()
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+logger = logging.getLogger(__name__)
 
 DEFAULT_LAYOUT_PARAMS = {
     "layout": "neato",
@@ -85,8 +87,8 @@ def generate_graph_layout(graph_data, color_scheme):
             layout = ast.literal_eval(re.sub(r"^```(python|json)?|```$", "", response).strip())
             break
         except (SyntaxError, ValueError) as e:
-            print(f"[graph_generator] encountered error parsing graph layout: {e}")
-            print("[graph_generator] retrying...")
+            logger.warning(f"Encountered error parsing graph layout: {e}")
+            logger.info("Retrying...")
     
     layout["font_color"] = color_scheme["primary"]["text"]
     layout["background"] = color_scheme["primary"]["background"]
@@ -157,7 +159,7 @@ def convert_plt_to_img(fig):
 
 # Testing-------------------------------------------------------
 if __name__ == "__main__":
-    with open("./Agent-Model-Infographic-Generator/test/test_refined_data.txt", "r") as f:
+    with open("./enh_news_info/test/test_refined_data.txt", "r") as f:
         refined_data = json.load(f)
         graph_data = refined_data["graph"]
         color_scheme = refined_data["colors"]
@@ -167,7 +169,7 @@ if __name__ == "__main__":
 
     graph_img.show()
     
-    # save_path = "./Agent-Model-Infographic-Generator/test/test_img/"
+    # save_path = "./enh_news_info/test/test_img/"
     # img_file_name = "test_graph.png"
     # graph_img.save(save_path + img_file_name)
 
