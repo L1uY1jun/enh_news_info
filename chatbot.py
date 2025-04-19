@@ -364,7 +364,7 @@ def handle_figure_regen(message):
     
     bot.send_message(chat_id, f"Regenerating figures: {', '.join(str(fid) for fid in figure_ids)}")
 
-    stats_data = refined_data["key_facts"]["non_statistical"]
+    stats_data = refined_data["key_facts"]["statistical"]
     color_scheme = refined_data["colors"]
 
     for idx in figure_ids:
