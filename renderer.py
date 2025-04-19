@@ -57,7 +57,7 @@ def render(html_path):
 # Testing-------------------------------------------------------
 if __name__ == "__main__":
     html_url = "sample_html.html"
-    html_path = "C:/Users/Liu Yijun/Desktop/Study/FYP/eCaption/enh_news_info/test/" + html_url
+    html_path = "" # full path
     
     infographic_img = render(html_path)
     infographic_img.save("enh_news_info/test/test_infographic.png")
